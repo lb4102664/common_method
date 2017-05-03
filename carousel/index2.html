@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html >
+<head>
+	<meta charset="UTF-8">
+	<title>移动端轮播插件</title>
+	 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="initial-scale=1,width=device-width" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <script type="text/javascript" src="silder.js"></script>
+</head>
+<style type="text/css">
+*{margin: 0;padding: 0;}
+html,body{ width: 100%;overflow: hidden; }
+li{list-style: none;}
+.silder-list,.silder-list>li,.slider{
+    position: relative
+}
+.silder-list {
+	overflow: hidden;
+    transition: -webkit-transform 0 ease-out;
+    transition: transform 0 ease-out;
+    transition: transform 0 ease-out,-webkit-transform 0 ease-out;
+    -webkit-transition: -webkit-transform 0 ease-out
+}
+.silder-list>li img,.slider {
+    width: 100%;
+    height: 160px
+}
+
+
+.silder-list>li {
+    top: 0;
+    float: left
+}
+
+.silder-list>li>a {
+    display: block
+}
+
+.silder-icon {
+    position: absolute;
+    z-index: 5;
+    bottom: 5px;
+    left: 50%;
+    margin-right: 20px;
+    height: 5px;
+    margin-left: -5%
+}
+
+.silder-icon>li {
+    width: 5px;
+    height: 5px;
+    text-indent: -9999px;
+    margin: 0 5px;
+    background: #eee;
+    border-radius: 50%;
+    display: block;
+    float: left
+}
+
+.silder-icon>li.on {
+    background: #fe4145
+}
+</style>
+
+
+
+<body>
+     <!-- 轮播 -->
+            <div class="slider">
+                <ul class="silder-list">
+                    <li>
+                        <a href="#">
+                            <img src="z1.jpg" alt=""/>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="z1.jpg" alt=""/>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="z1.jpg" alt=""/>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+    <script type="text/javascript">
+    silder(".slider");
+
+    </script>
+    </body>
+</html>
