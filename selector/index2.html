@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html >
+<head>
+	<meta charset="UTF-8">
+	<title>移动端日期选择插件</title>
+	 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="initial-scale=1,width=device-width" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <script type="text/javascript" src="selector.js"></script>
+</head>
+
+
+
+
+<body>
+    <input type="text" class="select">
+    <input type="text" class="select2">
+
+
+    <script type="text/javascript">
+
+
+     
+     selectors({
+    dataArr:[[2010,2011,2222,3333,4444,5555,6666,7777,8888,9999,1111,1122,3344,5566,7788],[2010,2011,2222,3333,4444,5555,6666,7777,8888,9999,1111,1122,3344,5566,7788,2016,2033,2022]],
+     	evEle:".select",
+     	title:"日期",
+     	color:"red",
+     	fromatSplit:"-",
+     	dfvalue:[2011],
+ 
+     	eventAction:function(data){
+         document.querySelector(".select").value=data.join('-');
+
+
+     	}
+
+     });
+     selectors({
+
+     	evEle:".select2",
+     	title:"日期",
+     	color:"#fda626",
+     	fromatSplit:"-",
+ 
+     	eventAction:function(data){
+     		document.querySelector(".select2").value=data.join('-');
+
+
+     	}
+
+     });
+    </script>
+    </body>
+</html>
