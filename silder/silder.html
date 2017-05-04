@@ -1,0 +1,277 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>模仿京东详情滑动</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="initial-scale=1,width=device-width" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="outerScroller">
+        <!-- 商品介绍 -->
+        <div class="product">
+            <ul class='scroll'>
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+                <li>4</li>
+                <li>5</li>
+                <li>6</li>
+                <li>7</li>
+                <li>8</li>
+                <li>9</li>
+                <li>10</li>
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+                <li>4</li>
+                <li>5</li>
+                <li>6</li>
+                <li>7</li>
+                <li>8</li>
+                <li>9</li>
+                <li>10</li>
+            </ul>
+            <div class="product_text">
+                <p>上拉查看图文详情</p>
+            </div>
+            <!-- 商品图片详情 -->
+        </div>
+        <div class="proImg_info">
+            <div class="proImg_word">
+                <p>上拉显示产品</p>
+            </div>
+            <div class="product_box">
+            </div>
+        </div>
+    </div>
+    <style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+    
+    html,
+    body {
+        width: 100%
+    }
+    
+    .outerScroller {
+        transition: all 1s ease-out;
+    }
+    
+    .product_text {
+        height: 200px;
+        text-align: center;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+    }
+    
+    .scroll li {
+        height: 20px;
+        background: #ccc;
+        list-style: none;
+        height: 50px;
+        border-bottom: 1px solid #000
+    }
+    
+    .proImg_word {
+        height: 0;
+        transition: all .3s ease-out;
+        overflow: hidden
+    }
+    
+    img {
+        max-width: 100%;
+    }
+    </style>
+    <script>
+    (function(win) {
+        
+        function scrollClien(){
+             this.scroll = document.querySelector('.product');
+                this.outerScroller = document.querySelector('.outerScroller');
+                this.product_box = document.querySelector('.product_box');
+                 this.proImg_word = document.querySelector('.proImg_word');
+                  this.proImg_info = document.querySelector('.proImg_info');
+            this.touchStart=0;
+
+            this.touchDis=0;
+            this.falg=true;
+            this.state=true;
+            this.topScroll=0;
+            this.time=null;
+            this.init();
+
+        }
+        scrollClien.prototype={
+            constructor:scrollClien,
+            init:function(){
+                var _this=this;
+               
+
+                win.addEventListener("scroll", function() {
+                     clearTimeout(_this.time);
+                        _this.time = setTimeout(function() {
+                            _this.srollFun();
+                        }, 300);
+                });
+                  win.addEventListener("load", function() {
+                    
+                    _this.scroll.style.height = _this.scroll.scrollHeight + "px";
+                });
+
+            },
+            srollFun:function(){
+                  var _this=this;
+                  var top=0;
+
+                var proHg = this.scroll.scrollHeight;
+                if(this.falg){
+                     this.topScroll=document.body.scrollTop || document.documentElement.scrollTop;
+                top = this.topScroll+ document.documentElement.clientHeight;
+                }
+
+            if (proHg === top) {
+               this.state=true;
+
+
+
+               this.outerScroller.addEventListener('touchstart',this.touchEvent.bind(this), false);
+               this.outerScroller.addEventListener('touchmove',this.touchEvent.bind(this),  false);
+               this.outerScroller.addEventListener('touchend',this.touchEvent.bind(this), false);
+            }else{
+            	this.state=false;
+
+            }
+
+            },
+            touchEvent:function(event)
+            {
+            	if(this.state){
+            		 switch(event.type){
+            		case "touchstart":
+            		       this.tStart(event);
+            		             break;
+            		case "touchmove":
+            		        this.tMove(event);
+            		            break;
+            		case "touchend":
+            		      this.tEnd(event);
+            		              break;
+            	}
+
+            	}
+            	
+
+            },
+            tStart:function(event){
+            	//event.preventDefault();
+                var touch = event.targetTouches[0];
+            // 把元素放在手指所在的位置 
+            this.touchStart = touch.pageY;
+
+            },
+            tMove:function(event){
+            	
+                  var touch = event.targetTouches[0];
+            this.touchDis = touch.pageY - this.touchStart;
+            if (this.falg) {
+                if (this.touchDis < -100) {
+                    this.touchDis = -100 + this.touchDis / 20;
+
+                }
+
+                this.outerScroller.style.transform = "translateY(" + this.touchDis + "px)";
+
+            } else {
+                if (this.touchDis > 100) {
+                    this.touchDis = 100 + this.touchDis / 20;
+
+
+                }
+                 this.proImg_word.style.height=this.touchDis+"px";
+                
+
+            }
+
+            },
+
+            tEnd:function(event){
+
+                var _this=this;
+                 var clientHeight = document.documentElement.clientHeight;
+            if (this.falg) {
+                if (this.touchDis > -100) {
+                    this.outerScroller.style.transform = "translateY(" + 0 + "px)";
+                } else {
+
+                    this.product_box.innerHTML="<img src='s2.jpg' height='1000' />"; //这里写你要加载的详情
+
+                    this.outerScroller.style.transform = "translateY(-" + clientHeight + "px)";
+
+
+                    setTimeout(function() {
+                        _this.outerScroller.style.transition = "none";
+                        document.body.scrollTop = 0;
+                        _this.outerScroller.style.height = _this.proImg_info.clientHeight + "px";
+                        _this.outerScroller.style.transform = "translateY(-" + parseInt(_this.scroll.style.height) + "px)";
+                        _this.falg = false;
+                        _this.product_box.addEventListener('touchstart', function(event) {
+                              _this.tStart(event);
+                        }, false);
+                        _this.product_box.addEventListener('touchmove', function(event) {
+                              _this.tMove(event);
+
+                        }, false);
+                        _this.product_box.addEventListener('touchend', function(event) {
+                                 _this.tEnd(event);
+                        }, false)
+                    }, 1000);
+                }
+
+            }else{
+                if (this.touchDis < 100) {
+                    this.proImg_word.style.height=0+"px";
+                } else {
+                       
+                    this.proImg_word.style.height=0+"px";
+                    this.product_box.innerHTML="";
+                      this.outerScroller.style.transition = "all 1s ease-out";
+                       this.outerScroller.style.height = this.scroll.style.height;
+                     
+
+
+                    this.outerScroller.style.transform = "translateY(-" + (parseInt(this.scroll.style.height)-clientHeight) + "px)";
+                    setTimeout(function(){
+                        _this.outerScroller.style.transition = "none";
+                        _this.outerScroller.style.transform = "translateY(0px)";
+                          document.body.scrollTop = _this.topScroll;
+                          _this.state=false;
+                          _this.falg = true;
+                          _this.outerScroller.style.transition = "all 1s ease-out";
+                    },1000);
+                    
+                }
+
+            }
+
+            }
+
+
+        }
+
+
+
+                            new scrollClien();
+
+    })(window);
+    </script>
+</body>
+
+</html>
